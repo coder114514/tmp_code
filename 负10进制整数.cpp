@@ -6,7 +6,7 @@ int bits[1010], nB;
 void change(int n) {
     nB = 0;
     while (n) {
-        int q = ceil(n / -10.0);
+        int q = (n > 0 ? n/-10 : (-n+9)/10); //表示ceil(n/-10)，c++的整除使向0取整的
         bits[++nB] = n - q * -10;
         n = q;
     }
