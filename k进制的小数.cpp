@@ -42,7 +42,8 @@ int main() {
     if (x == 0) {
         return 0;
     }
-    cout << '.', ++len;
+    cout << '.';
+    ++len;
     while (!occur[x]) {
         occur[x] = len;
         if (x / y >= 10) {
