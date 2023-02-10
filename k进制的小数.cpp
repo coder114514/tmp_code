@@ -1,4 +1,5 @@
 //encoding: GB2312
+//still working on negative k
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -58,23 +59,23 @@ int main() {
     else {
         putnum(x / y);
     }
-    x = (x % y) * k;
+    x = mod(x, y) * k;
     if (x == 0) {
         return 0;
     }
     cout << '.';
     ++len;
-    while (!occur[x]) {
+    while (!occur[x] && x) {
         occur[x] = len;
-        if (x / y >= 10) {
-            cout << '(' << x / y % k << ')';
-            len += cnt(x / y % k) + 2;
+        if (mod(quot(x, y), k) >= 10) {
+            cout << '(' << mod(quot(x, y), k) << ')';
+            len += cnt(mod(quot(x, y), k)) + 2;
         }
         else {
-            cout << x / y;
+            cout << mod(quot(x, y), k);
             ++len;
         }
-        x = (x % y) * k;
+        x = mod(x, y) * k;
     }
     if (x == 0) return 0;
     cout << endl;
