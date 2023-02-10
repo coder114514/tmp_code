@@ -6,6 +6,15 @@ typedef long long ll;
 ll x, y, k, len;
 map<ll, ll> occur;
 
+ll quot(ll n, ll k) {
+    if (k > 0) {
+        return (n > 0 ? n / k : (n-k+1) / k);
+    }
+    else {
+        return (n > 0 ? n / k : (n+k+1) / k);
+    }
+}
+
 ll mod(ll n, ll k) {
     if (k > 0) {
         ll q = (n > 0 ? n / k : (n-k+1) / k);
@@ -27,14 +36,14 @@ ll cnt(ll x) {
 }
 
 void putnum(ll x) {
-    if (x <= 0) return;
-    putnum(x / k);
-    if (x % k >= 10) {
-        cout << '(' << x % k << ')';
-        len += cnt(x % k) + 2;
+    if (x == 0) return;
+    putnum(quot(x, k));
+    if (mod(x, k) >= 10) {
+        cout << '(' << mod(x, k) << ')';
+        len += cnt(mod(x, k)) + 2;
     }
     else {
-        cout << x % k;
+        cout << mod(x, k);
         ++len;
     }
 }
@@ -67,6 +76,7 @@ int main() {
         }
         x = (x % y) * k;
     }
+    if (x == 0) return 0;
     cout << endl;
     for (ll j = 1; j <= len; j++) {
         cout << (j <= occur[x] ? ' ' : '^');
