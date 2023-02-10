@@ -6,9 +6,9 @@ int bits[1010], nB;
 void change(int n) {
     nB = 0;
     while (n) {
-        int m = (n > 0 ? n / -10 : (-n + 9) / 10);
-        bits[++nB] = n - m * -10;
-        n = m;
+        int q = ceil(n / -10.0);
+        bits[++nB] = n - q * -10;
+        n = q;
     }
     if (!nB) bits[++nB] = 0;
 }
