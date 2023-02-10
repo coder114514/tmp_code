@@ -19,7 +19,7 @@ void putnum(ull x) {
 }
 
 int main() {
-    cout<<"输入x,y,k,输出x/y在k进制下的小数形式（打波浪线的是循环节，若小数某位大于9，就会打上括号）"<<endl;
+    cout<<"杈撳叆x,y,k,杈撳嚭x/y鍦╧杩涘埗涓嬬殑灏忔暟褰㈠紡锛堟墦娉㈡氮绾跨殑鏄惊鐜妭锛岃嫢灏忔暟鏌愪綅澶т簬9锛屽氨浼氭墦涓婃嫭鍙凤級"<<endl;
     cin>>x>>y>>k;
     if(x<y)cout<<'0',len=1;
     else putnum(x/y);
