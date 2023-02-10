@@ -23,7 +23,7 @@ void putnum(ull x) {
 }
 
 int main() {
-    cout << "输入x,y,k,输出x/y在k进制下的小数形式（打波浪线的是循环节，若小数某位大于9，就会打上括号）" << endl;
+    cout << "输入x,y,k,输出x/y在k进制下的小数形式(打波浪线的是循环节,若小数某位大于9,就会打上括号)" << endl;
     cin >> x >> y >> k;
     if (x < y)
         cout << '0', len = 1;
