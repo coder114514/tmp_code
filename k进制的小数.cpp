@@ -1,3 +1,4 @@
+//encoding: GB2312
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -23,14 +24,17 @@ void putnum(ull x) {
 }
 
 int main() {
-    cout << "è¾“å…¥x,y,k,è¾“å‡ºx/yåœ¨kè¿›åˆ¶ä¸‹çš„å°æ•°å½¢å¼(æ‰“æ³¢æµªçº¿çš„æ˜¯å¾ªçŽ¯èŠ‚,è‹¥å°æ•°æŸä½å¤§äºŽ9,å°±ä¼šæ‰“ä¸Šæ‹¬å·)" << endl;
+    cout << "ÊäÈëx,y,k,Êä³öx/yÔÚk½øÖÆÏÂµÄÐ¡ÊýÐÎÊ½(´ò²¨ÀËÏßµÄÊÇÑ­»·½Ú,ÈôÐ¡ÊýÄ³Î»´óÓÚ9,¾Í»á´òÉÏÀ¨ºÅ)" << endl;
     cin >> x >> y >> k;
     if (x < y)
         cout << '0', len = 1;
     else
         putnum(x / y);
-    cout << '.', ++len;
     x = (x % y) * k;
+    if (x == 0) {
+        return 0;
+    }
+    cout << '.', ++len;
     while (occur[x] == 0) {
         occur[x] = len;
         if (x / y >= 10)
