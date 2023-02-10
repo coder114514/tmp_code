@@ -2,12 +2,23 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef unsigned long long ull;
-ull x, y, k, len;
-map<ull, ull> occur;
+typedef long long ll;
+ll x, y, k, len;
+map<ll, ll> occur;
 
-ull cnt(ull x) {
-    ull res = 0;
+ll mod(ll n, ll k) {
+    if (k > 0) {
+        ll q = (n > 0 ? n / k : (n-k+1) / k);
+        return n - q * k;
+    }
+    else {
+        ll q = (n > 0 ? n / k : (n+k+1) / k);
+        return n - q * k;
+    }
+}
+
+ll cnt(ll x) {
+    ll res = 0;
     while (x > 0) {
         ++res;
         x /= 10;
@@ -15,7 +26,7 @@ ull cnt(ull x) {
     return res;
 }
 
-void putnum(ull x) {
+void putnum(ll x) {
     if (x <= 0) return;
     putnum(x / k);
     if (x % k >= 10) {
@@ -57,7 +68,7 @@ int main() {
         x = (x % y) * k;
     }
     cout << endl;
-    for (ull j = 1; j <= len; j++) {
+    for (ll j = 1; j <= len; j++) {
         cout << (j <= occur[x] ? ' ' : '^');
     }
     cout << endl;
