@@ -1,3 +1,4 @@
+// msvc
 #ifndef UNICODE
 #define UNICODE
 #endif
