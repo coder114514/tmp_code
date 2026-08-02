@@ -18,15 +18,21 @@ int wmain(int argc, wchar_t* argv[])
     _setmode(_fileno(stdout), _O_U16TEXT);
     _setmode(_fileno(stderr), _O_U16TEXT);
 
-    if (argc < 2)
+    if (argc != 2)
     {
         wprintf(L"Usage: %s <path_to_lnk_file>\n", argv[0]);
         return 1;
     }
 
-    HRESULT hr;
-    BOOL    comInit = FALSE;
-    int     retCode = 0;
+    HRESULT           hr;
+    BOOL              comInit = FALSE;
+    int               retCode = 0;
+    IShellLinkW*      pShellLink = NULL;
+    IPersistFile*     pPersistFile = NULL;
+    IPropertyStore*   pPropStore = NULL;
+
+    PROPVARIANT propVal;
+    PropVariantInit(&propVal);
 
     /* init COM */
     hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
@@ -39,8 +45,6 @@ int wmain(int argc, wchar_t* argv[])
     }
 
     /* create ShellLink */
-    IShellLinkW* pShellLink = NULL;
-
     hr = CoCreateInstance(
         &CLSID_ShellLink,
         NULL,
@@ -56,8 +60,6 @@ int wmain(int argc, wchar_t* argv[])
     }
 
     /* get IPersistFile */
-    IPersistFile* pPersistFile = NULL;
-
     hr = pShellLink->lpVtbl->QueryInterface(pShellLink, &IID_IPersistFile, (LPVOID*)&pPersistFile);
     if (FAILED(hr))
     {
@@ -75,7 +77,7 @@ int wmain(int argc, wchar_t* argv[])
         goto cleanup;
     }
 
-    /* read ShellLink target path */
+    /* read target path */
     wchar_t target[MAX_PATH];
 
     hr = pShellLink->lpVtbl->GetPath(pShellLink, target, MAX_PATH, NULL, SLGP_RAWPATH);
@@ -90,40 +92,52 @@ int wmain(int argc, wchar_t* argv[])
     }
     else
     {
-        wprintf(L"GetPath: %s\n", target);
+        wprintf(L"GetPath: Path: %s\n", target);
     }
 
-    /* get IPropertyStore */
-    IPropertyStore* pPropStore = NULL;
-    PROPVARIANT propVal;
-    PropVariantInit(&propVal);
-
+    /* get link arguments */
     hr = pShellLink->lpVtbl->QueryInterface(pShellLink, &IID_IPropertyStore, (LPVOID*)&pPropStore);
     if (FAILED(hr))
     {
-        fwprintf(stderr, L"Failed to get IPropertyStore interface. Error: 0x%08X\n", hr);
+        fwprintf(stderr, L"GetArguments (modern): Failed to get IPropertyStore interface. Error: 0x%08X\n", hr);
         retCode = 1;
     }
     else
     {
-        /* read ShellLink arguments */
         hr = pPropStore->lpVtbl->GetValue(pPropStore, &PKEY_Link_Arguments, &propVal);
         if (FAILED(hr))
         {
-            fwprintf(stderr, L"GetValue: Failed to read link arguments. Error: 0x%08X\n", hr);
+            fwprintf(stderr, L"GetArguments (modern): GetValue failed for link arguments. Error: 0x%08X\n", hr);
             retCode = 1;
         }
         else
         {
             if (propVal.vt == VT_LPWSTR && propVal.pwszVal != NULL)
             {
-                wprintf(L"Arguments: %s\n", propVal.pwszVal);
+                wprintf(L"GetArguments (modern): Link arguments: %s\n", propVal.pwszVal);
             }
             else // vt == VT_EMPTY
             {
-                wprintf(L"No Arguments\n");
+                wprintf(L"GetArguments (modern): No link arguments\n");
             }
         }
+    }
+
+    /* get description */
+    wchar_t desc[INFOTIPSIZE];
+    hr = pShellLink->lpVtbl->GetDescription(pShellLink, desc, INFOTIPSIZE);
+    if (FAILED(hr))
+    {
+        fwprintf(stderr, L"GetDescription: Failed to get description. Error: 0x%08X\n", hr);
+        retCode = 1;
+    }
+    else if (desc[0] != L'\0')
+    {
+        wprintf(L"GetDescription: Description: %s\n", desc);
+    }
+    else
+    {
+        wprintf(L"GetDescription: No description\n");
     }
 
 cleanup:
